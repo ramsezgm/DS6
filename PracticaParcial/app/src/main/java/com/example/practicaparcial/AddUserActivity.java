@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
@@ -35,6 +36,7 @@ public class AddUserActivity extends AppCompatActivity {
 
     public int guardarEnArchivo(String usuario){
         try{
+            //File archivo = new File(getFilesDir(), "users.txt");
             String oldText = "";
             BufferedReader br = new BufferedReader(new InputStreamReader(
                     openFileInput("users.txt")));
