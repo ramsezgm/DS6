@@ -32,7 +32,7 @@ public class UsersAdapter extends ArrayAdapter<Users> {
         apellido.setText(users.get(position).getApellido());
 
         TextView edad = item.findViewById(R.id.edad);
-        edad.setText(users.get(position).getEdad());
+        edad.setText(Integer.toString(users.get(position).getEdad()));
 
         TextView cedula = item.findViewById(R.id.cedula);
         cedula.setText(users.get(position).getCedula());

@@ -3,6 +3,7 @@ package com.example.practicaparcial;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
@@ -36,19 +38,16 @@ public class AddUserActivity extends AppCompatActivity {
 
     public int guardarEnArchivo(String usuario){
         try{
-            //File archivo = new File(getFilesDir(), "users.txt");
-            String oldText = "";
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    openFileInput("users.txt")));
-            String text = br.readLine();
-            if(!text.isEmpty()){
-                oldText = text;
+            if(archivoExiste()){
+                sobreescribirArchivo(usuario);
             }
+            else{
+                OutputStreamWriter out = new OutputStreamWriter(
+                        openFileOutput("usuarios.txt",Context.MODE_PRIVATE));
 
-            OutputStreamWriter fout = new OutputStreamWriter(
-                    openFileOutput("users.txt", Context.MODE_PRIVATE));
-            fout.write(oldText+usuario);
-            fout.close();
+                out.write(usuario);
+                out.close();
+            }
             return 1;
         }
         catch (Exception e){
@@ -69,6 +68,7 @@ public class AddUserActivity extends AppCompatActivity {
             int res = guardarEnArchivo(user);
             if(res == 1){
                 this.notify("sisepudo ermano, se guardo en el arch");
+                startActivity(new Intent(this, MainActivity.class));
             }
             else{
                 this.notify("se pudrio, no se guardo en el arch");
@@ -83,4 +83,35 @@ public class AddUserActivity extends AppCompatActivity {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 
+    public boolean archivoExiste(){
+        try{
+            BufferedReader br =
+                    new BufferedReader(new InputStreamReader(openFileInput("usuarios.txt")));
+            String texto = br.readLine();
+            br.close();
+            if(!texto.isEmpty()){
+                return true;
+            }
+        }
+        catch (Exception e){
+            return false;
+        }
+        return false;
+    }
+
+    public void sobreescribirArchivo(String reg){
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    openFileInput("usuarios.txt")));
+            String texto = br.readLine();
+
+            OutputStreamWriter out = new OutputStreamWriter(
+                    openFileOutput("usuarios.txt", Context.MODE_PRIVATE));
+            out.write(texto+reg);
+            out.close();
+        }
+        catch(Exception e){
+            this.notify("Error "+e.getMessage());
+        }
+    }
 }
